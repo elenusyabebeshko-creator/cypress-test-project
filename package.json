@@ -1,0 +1,33 @@
+{
+    "name": "cypress-test-project",
+    "version": "1.0.0",
+    "description": "��#\u0000 \u0000C\u0000y\u0000p\u0000r\u0000e\u0000s\u0000s\u0000 \u0000T\u0000e\u0000s\u0000t\u0000 \u0000P\u0000r\u0000o\u0000j\u0000e\u0000c\u0000t\u0000\r\u0000 \u0000",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/elenusyabebeshko-creator/cypress-test-project.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/elenusyabebeshko-creator/cypress-test-project/issues"
+    },
+    "homepage": "https://github.com/elenusyabebeshko-creator/cypress-test-project#readme",
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "cypress": "^15.20.1",
+        "eslint": "^10.8.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-cypress": "^7.0.0",
+        "eslint-plugin-prettier": "^5.5.6",
+        "globals": "^17.11.0",
+        "husky": "^9.1.7",
+        "prettier": "^3.9.6"
+    }
+}
