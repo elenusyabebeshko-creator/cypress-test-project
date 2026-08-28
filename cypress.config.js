@@ -1,6 +1,7 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+    allowCypressEnv: false,
     e2e: {
         baseUrl: 'https://qauto.forstudy.space',
         viewportWidth: 1280,
