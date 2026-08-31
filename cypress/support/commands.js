@@ -41,6 +41,26 @@ Cypress.Commands.add('login', (email, password) => {
     ).should('be.visible');
 });
 
+// Логін заздалегідь зареєстрованим юзером, креди якого зберігаються в env поточної конфігурації (cypress.qauto1.config.js / cypress.qauto2.config.js).
+// один і той самий тест логіниться під різним юзером залежно від того, яка конфігурація обрана для запуску (qauto1 чи qauto2) — і не треба щоразу хардкодити юзер/пароль у тесті.
+
+// застарілий варіант, який не працює з TypeScript (бо не знає про env юзера)
+/*Cypress.Commands.add('loginAsRegisteredUser', () => {
+    const email = Cypress.env('userEmail');
+    const password = Cypress.env('userPassword');
+    cy.login(email, password);
+});
+*/
+
+//оновлений варіант, який працює з TypeScript (бо явно вказує, що повертає обʼєкт із полями userEmail і userPassword)
+Cypress.Commands.add('loginAsRegisteredUser', () => {
+    cy.env(['userEmail', 'userPassword']).then(
+        ({ userEmail, userPassword }) => {
+            cy.login(userEmail, userPassword);
+        }
+    );
+});
+
 // Перевизначення команди type у відповідності з прикладом з документації https://docs.cypress.io/api/cypress-api/custom-commands#Overwrite-Existing-Commands
 // для того, щоб при вводі паролів сам пароль не відображався у логах Cypress — маскування паролів у Command Log
 Cypress.Commands.overwrite('type', (originalFn, element, text, options) => {
