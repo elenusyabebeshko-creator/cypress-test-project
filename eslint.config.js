@@ -22,7 +22,11 @@ module.exports = [
         },
     },
     {
-        files: ['cypress/**/*.cy.js', 'cypress/support/**/*.js'],
+        files: [
+            'cypress/**/*.cy.js',
+            'cypress/support/**/*.js',
+            'cypress/pages/**/*.js',
+        ],
         ...cypressPlugin.configs.recommended,
         languageOptions: {
             ...cypressPlugin.configs.globals.languageOptions,

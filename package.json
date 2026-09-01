@@ -5,6 +5,13 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "cy:open": "cypress open",
+        "test:qauto1": "cypress run --config-file cypress.qauto1.config.js",
+        "test:qauto2": "cypress run --config-file cypress.qauto2.config.js",
+        "report:merge": "mochawesome-merge cypress/reports/mocha/*.json > cypress/reports/mochawesome.json",
+        "report:generate": "marge cypress/reports/mochawesome.json -o . --inline",
+        "report:qauto1": "npm run test:qauto1 && npm run report:merge && npm run report:generate",
+        "report:qauto2": "npm run test:qauto2 && npm run report:merge && npm run report:generate",
         "prepare": "husky"
     },
     "repository": {
@@ -28,6 +35,12 @@
         "eslint-plugin-prettier": "^5.5.6",
         "globals": "^17.11.0",
         "husky": "^9.1.7",
+        "mochawesome": "^8.0.1",
+        "mochawesome-merge": "^5.1.1",
+        "mochawesome-report-generator": "^6.3.2",
         "prettier": "^3.9.6"
+    },
+    "overrides": {
+        "serialize-javascript": "^7.0.4"
     }
 }
