@@ -77,3 +77,39 @@ Cypress.Commands.overwrite('type', (originalFn, element, text, options) => {
 
     return originalFn(element, text, options);
 });
+
+//Для HW 22.1, крок 3: окрема кастомна команда для створення expense напряму
+// через API (POST /api/expenses), БЕЗ проходження UI-форми
+// Повертає сам response (через cy.request, який Cypress автоматично робить awaitable у ланцюжку команд)
+// щоб виклик тесту міг далі звірити статус-код і тіло відповіді через .then().
+//
+// api-docs (Expenses ->
+// POST /expenses): carId, reportedAt (формат "YYYY-MM-DD"), mileage, liters,
+// totalCost, forceMileage — усі 6 полів обов'язкові за схемою.
+//auth передається так само явно, як і в cy.visit() (HW 21.1)
+// Cypress не кешує Basic Auth між окремими мережевими викликами
+Cypress.Commands.add(
+    'createExpenseViaApi',
+    ({
+        carId,
+        reportedAt,
+        mileage,
+        liters,
+        totalCost,
+        forceMileage = false,
+    }) => {
+        return cy.request({
+            method: 'POST',
+            url: '/api/expenses',
+            auth: { username: 'guest', password: 'welcome2qauto' },
+            body: {
+                carId,
+                reportedAt,
+                mileage,
+                liters,
+                totalCost,
+                forceMileage,
+            },
+        });
+    }
+);
