@@ -42,5 +42,8 @@
     },
     "overrides": {
         "serialize-javascript": "^7.0.4"
+    },
+    "dependencies": {
+        "cypress-plugin-api": "^2.12.2"
     }
 }
