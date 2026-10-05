@@ -1,5 +1,5 @@
-const garagePage = require('../pages/GaragePage');
-const expensesListPage = require('../pages/ExpensesListPage');
+const garagePage = require('../../pages/GaragePage.js');
+const expensesListPage = require('../../pages/ExpensesListPage.js');
 
 // Пробіг — звичайне фіксоване тестове значення
 // Бренд і модель обираються рандомно і запамятовуються
