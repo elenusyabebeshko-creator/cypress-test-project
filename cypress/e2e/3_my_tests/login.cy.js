@@ -1,4 +1,4 @@
-import { validUser, uniqueEmail } from '../support/testData';
+import { validUser, uniqueEmail } from '../../support/testData.js';
 
 describe('Login flow via custom command', () => {
     const email = uniqueEmail();

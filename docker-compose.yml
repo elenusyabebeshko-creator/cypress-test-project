@@ -1,0 +1,36 @@
+services:
+    cypress-chrome:
+        build:
+            context: .
+            args:
+                BASE_IMAGE: cypress/browsers:latest
+                CYPRESS_VERSION: 15.20.1
+        container_name: cypress-chrome
+        command:
+            - '--browser'
+            - 'chrome'
+            - '--config-file'
+            - 'cypress.qauto1.config.js'
+            - '--spec'
+            - 'cypress/e2e/3_my_tests/**/*.cy.js'
+        volumes:
+            - ./cypress:/e2e/cypress
+            - ./cypress.qauto1.config.js:/e2e/cypress.qauto1.config.js
+
+    cypress-firefox:
+        build:
+            context: .
+            args:
+                BASE_IMAGE: cypress/browsers:node-24.17.0-chrome-149.0.7827.155-1-ff-152.0-edge-149.0.4022.69-1
+                CYPRESS_VERSION: 15.10.0
+        container_name: cypress-firefox
+        command:
+            - '--browser'
+            - 'firefox'
+            - '--config-file'
+            - 'cypress.qauto1.config.js'
+            - '--spec'
+            - 'cypress/e2e/3_my_tests/**/*.cy.js'
+        volumes:
+            - ./cypress:/e2e/cypress
+            - ./cypress.qauto1.config.js:/e2e/cypress.qauto1.config.js

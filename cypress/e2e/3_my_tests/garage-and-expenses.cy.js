@@ -1,5 +1,5 @@
-const garagePage = require('../pages/GaragePage');
-const expensesPage = require('../pages/ExpensesPage');
+const garagePage = require('../../pages/GaragePage.js');
+const expensesPage = require('../../pages/ExpensesPage.js');
 
 describe('Garage and Fuel expenses scenarios', () => {
     beforeEach(() => {

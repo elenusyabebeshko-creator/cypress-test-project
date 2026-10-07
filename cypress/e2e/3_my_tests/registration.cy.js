@@ -5,7 +5,7 @@ import {
     lastNameValidationCases,
     emailValidationCases,
     passwordValidationCases,
-} from '../support/testData';
+} from '../../support/testData';
 
 function fillSignUpForm({ name, lastName, email, password, repeatPassword }) {
     cy.get('#signupName').clear();
