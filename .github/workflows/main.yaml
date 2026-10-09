@@ -1,0 +1,98 @@
+name: Cypress tests in Docker
+
+on:
+    # Ручний запуск з UI (Actions -> Cypress tests in Docker -> Run workflow) зі змінними
+    workflow_dispatch:
+        inputs:
+            docker_image:
+                description: 'Docker-образ cypress/browsers, у якому запускаються тести'
+                required: true
+                type: string
+                default: 'cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1'
+            browser:
+                description: 'Браузер для запуску'
+                required: true
+                type: choice
+                default: chrome
+                options:
+                    - chrome
+                    - firefox
+                    - edge
+                    - electron
+            config_file:
+                description: 'Конфіг-файл середовища'
+                required: true
+                type: choice
+                default: cypress.qauto1.config.js
+                options:
+                    - cypress.qauto1.config.js
+                    - cypress.qauto2.config.js
+            spec:
+                description: 'Які спеки запускати (glob)'
+                required: true
+                type: string
+                default: 'cypress/e2e/3_my_tests/**/*.cy.js'
+    # Автоматичний запуск на PR / push у main (в цьому випадку беруться дефолтні значення нижче)
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    cypress-run:
+        name: Cypress (${{ inputs.browser || 'chrome' }}) in Docker
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+
+        # Увесь job (всі steps) виконується ВСЕРЕДИНІ Docker-контейнера
+        container:
+            image: ${{ inputs.docker_image || 'cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1' }}
+            # рекомендація Cypress для GitHub Actions: запуск під користувачем runner (uid 1001),
+            # щоб не було проблем з правами на робочу папку та кешем Cypress
+            options: --user 1001
+
+        env:
+            BROWSER: ${{ inputs.browser || 'chrome' }}
+            CONFIG_FILE: ${{ inputs.config_file || 'cypress.qauto1.config.js' }}
+            SPEC: ${{ inputs.spec || 'cypress/e2e/3_my_tests/**/*.cy.js' }}
+            HUSKY: 0 # husky (скрипт prepare) у CI не потрібен
+            CI: true
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Show environment inside container
+              run: |
+                  echo "Image:   ${{ inputs.docker_image || 'default image' }}"
+                  echo "Browser: $BROWSER | Config: $CONFIG_FILE | Spec: $SPEC"
+                  node -v && npm -v
+                  cat /etc/os-release | head -2
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Verify Cypress
+              run: |
+                  npx cypress verify
+                  npx cypress info
+
+            - name: Run Cypress tests
+              run: npx cypress run --browser "$BROWSER" --config-file "$CONFIG_FILE" --spec "$SPEC"
+
+            - name: Upload screenshots (on failure)
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: cypress-screenshots
+                  path: cypress/screenshots
+                  if-no-files-found: ignore
+
+            - name: Upload mochawesome reports
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: cypress-reports
+                  path: cypress/reports
+                  if-no-files-found: ignore
+                  retention-days: 14
